@@ -1,6 +1,11 @@
 # This module contains the KNN class
 ## This module will be used to classify new investors based on their investments and their Euclidian distance to already-classified investors.
 
+# library
+from collections import Counter
+
+# class
+
 class KNN():
     '''This class allows for classifying a new investor based on its own investment portfolio in accord to a list of already-classified investors. Investor will be labeled as either "Conservative" or "Moderate" or "Aggressive".
     The label will be assigned based on the mode of labels of the K nearest already-classified investors (neighbors). The K nearest neighbours will those already-classified investors whose Euclidian distances to the new investor are the shortest ones.
@@ -92,26 +97,28 @@ class KNN():
         neighbour = sorted_data
         
         # storage of the k-nearest-neighbours
-        classifications = []
+        label_counter = []
         
         for i in range(k):
             for id_, class_, invest in self.classified_dataset:
                 if id_ == neighbour[i][1]:
-                    classifications.append(class_)
+                    label_counter.append(class_)
         
         # finding the mode of k neighbours
-        countings = {'Conservative': 0, 'Moderate': 0, 'Aggressive': 0}
         
-        for i in classifications:
-            if i == 'Conservative':
-                countings['Conservative'] += 1
-            elif i == 'Moderate':
-                countings['Moderate'] += 1
-            else:
-                countings['Aggressive'] += 1
+        return Counter(label_counter).most_common(1)[0][0]
+        #countings = {'Conservative': 0, 'Moderate': 0, 'Aggressive': 0}
+        
+        #for i in classifications:
+        #    if i == 'Conservative':
+        #        countings['Conservative'] += 1
+        #    elif i == 'Moderate':
+        #        countings['Moderate'] += 1
+        #    else:
+        #        countings['Aggressive'] += 1
 
-        # Finding the mode
-        countings = list(countings.items())
-        countings.sort(key=lambda x: x[1], reverse = True)
-        return countings[0][0]
+        ## Finding the mode
+        #countings = list(countings.items())
+        #countings.sort(key=lambda x: x[1], reverse = True)
+        #return countings[0][0]
     
