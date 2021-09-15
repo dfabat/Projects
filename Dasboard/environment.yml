@@ -1,0 +1,9 @@
+name: stats
+dependencies:
+  - python=3.9.2
+  - pandas=1.2.3
+  - plotly
+  - pystan
+  - pip:
+    - prophet
+    
