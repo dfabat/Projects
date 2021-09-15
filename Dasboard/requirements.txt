@@ -3,3 +3,4 @@ pystan
 prophet
 plotly
 cufflinks
+os
