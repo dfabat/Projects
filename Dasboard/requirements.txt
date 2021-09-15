@@ -1,4 +1,4 @@
 pandas
 pystan
-fbprophet
+streamlit_prophet
 plotly
