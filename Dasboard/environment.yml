@@ -4,5 +4,5 @@ dependencies:
   - pandas=1.2.3
   - plotly
   - pystan
-  - prophet_dev prophet
+  - "prophet_dev prophet"
     
