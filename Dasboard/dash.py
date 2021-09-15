@@ -41,8 +41,8 @@ def dataframe_datetime(df):
     df.dt = pd.to_datetime(df.dt)
     return df
 
-df_land = dataframe_datetime(pd.read_csv(local + "\\df_land.csv"))
-df_ocean = dataframe_datetime(pd.read_csv(local + "\\df_ocean.csv"))
+df_land = dataframe_datetime(pd.read_csv(local + "/df_land.csv"))
+df_ocean = dataframe_datetime(pd.read_csv(local + "/df_ocean.csv"))
 
 ## Plotagem dos gráficos
 def plot_land(df_land):
@@ -200,7 +200,7 @@ else:
 st.subheader("Temperaturas médias nos continentes")
 
 # Temperatura das cidades de 1901 a 2013
-df_city = pd.read_csv(local + "\\Dataset_limpo_reduzido.csv")
+df_city = pd.read_csv(local + "/Dataset_limpo_reduzido.csv")
 
 def continentes(df_continent):
     # Gerando os modelos para o hover
@@ -356,8 +356,8 @@ col6.metric('Europa', v_max, round((v_max-v_min), 1))
 
 # Temperaturas por países de escolha
 st.subheader("Comparativo entre países / cidades de interesse")
-by_countries = pd.read_csv(local + "\\research_countries.csv")
-by_cities = pd.read_csv(local + "\\by_cities.csv")
+by_countries = pd.read_csv(local + "/research_countries.csv")
+by_cities = pd.read_csv(local + "/by_cities.csv")
 
 is_countries = st.radio("Deseja comparar países ou cidades entre si?", ("Países", "Cidades"))
 
