@@ -4,4 +4,5 @@ dependencies:
   - pandas=1.2.3
   - plotly
   - pystan
-  - label/prophet_dev prophet
+  - pip:
+    - fbprophet
