@@ -1,5 +1,4 @@
 # pacotes de manipulação e visualização simples
-import os
 import pandas as pd
 import streamlit as st
 from prophet import Prophet
@@ -31,21 +30,13 @@ st.markdown(link_datahub, unsafe_allow_html=True)
 
 # Temperatura média na terra e oceano
 st.subheader("Variações na temperatura global ao longo dos anos")
-
-# local dos arquivos
-
 ## dataframes
-def read_dataframe(name, bool=False):
-    df = pd.read_csv(name)
-    if bool == True:
-        df.dt = pd.to_datetime(df.dt)
-        return df
-    else:
-        return df
+def dataframe_datetime(df):
+    df.dt = pd.to_datetime(df.dt)
+    return df
 
-
-df_land = read_dataframe("df_land.csv", True)
-df_ocean = read_dataframe("df_ocean.csv", True)
+df_land = dataframe_datetime(pd.read_csv("https://raw.githubusercontent.com/tvfukuda/LC-mod2-proj2/main/df_land.csv"))
+df_ocean = dataframe_datetime(pd.read_csv("https://raw.githubusercontent.com/tvfukuda/LC-mod2-proj2/main/df_ocean.csv"))
 
 ## Plotagem dos gráficos
 def plot_land(df_land):
@@ -67,8 +58,7 @@ def plot_land(df_land):
         x=df_land['dt'], y=round(df_land["LandMovingAverageTemperature12"],1), name='Temperatura média anual móvel', text=text_2, hoverinfo="text"))
 
     fig.layout.update(title_text='Temperatura global média dos continentes',
-                     xaxis_rangeslider_visible=True
-                     )
+                     xaxis_rangeslider_visible=True)
 
     fig.layout.update(
         xaxis=dict(
@@ -82,8 +72,7 @@ def plot_land(df_land):
                 tickfont=dict(
                     family='Arial',
                     size=12,
-                    color='rgb(82,82,82)'),
-                title_standoff = 200,
+                    color='rgb(82,82,82)')
             ),
         yaxis=dict(
                 showline=True,
@@ -109,7 +98,7 @@ def plot_land(df_land):
         r=20,
         l=100,
         t=100,
-        b=110
+        b=80
     ),
         plot_bgcolor='rgb(255,255,255)',  # plot_bgcolor='white'   
         
@@ -151,7 +140,6 @@ def plot_ocean(df_ocean):
                     family='Arial',
                     size=12,
                     color='rgb(82,82,82)'),
-                title_standoff = 200,
             ),
         yaxis=dict(
                 showline=True,
@@ -177,7 +165,7 @@ def plot_ocean(df_ocean):
         r=20,
         l=100,
         t=100,
-        b=110
+        b=80
     ),
         plot_bgcolor='rgb(255,255,255)',  # plot_bgcolor='white'   
         
@@ -203,7 +191,7 @@ else:
 st.subheader("Temperaturas médias nos continentes")
 
 # Temperatura das cidades de 1901 a 2013
-df_city = read_dataframe("Dataset_limpo_reduzido.csv")
+df_city = pd.read_csv("https://raw.githubusercontent.com/tvfukuda/LC-mod2-proj2/main/Dataset_limpo_reduzido.csv")
 
 def continentes(df_continent):
     # Gerando os modelos para o hover
@@ -359,8 +347,8 @@ col6.metric('Europa', v_max, round((v_max-v_min), 1))
 
 # Temperaturas por países de escolha
 st.subheader("Comparativo entre países / cidades de interesse")
-by_countries = read_dataframe("research_countries.csv")
-by_cities = read_dataframe("by_cities.csv")
+by_countries = pd.read_csv("https://raw.githubusercontent.com/tvfukuda/LC-mod2-proj2/main/research_countries.csv")
+by_cities = pd.read_csv("https://raw.githubusercontent.com/tvfukuda/LC-mod2-proj2/main/by_cities.csv")
 
 is_countries = st.radio("Deseja comparar países ou cidades entre si?", ("Países", "Cidades"))
 
@@ -381,8 +369,7 @@ if is_countries == "Países":
                 title = "Evolução da temperatura médias nos países selecionados",
                 labels={"AverageTemperature": f"Temperatura média em °C",
                         "Year": "Década",
-                        "Country": "País"},
-                )
+                        "Country": "País"})
             st.plotly_chart(fig, use_container_width=True)
         else:
             df = df[df.Country.isin(countries)]
@@ -450,4 +437,3 @@ if st.button("Vai"):
     st.write("**Métricas da predição**")
     fig_2 = m.plot_components(forecast)
     st.write(fig_2)
-
