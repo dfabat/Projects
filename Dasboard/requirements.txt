@@ -3,4 +3,4 @@ pystan
 prophet
 plotly
 cufflinks
-jmcmurray
+jmcmurray==os
