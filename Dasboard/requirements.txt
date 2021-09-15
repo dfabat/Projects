@@ -3,4 +3,4 @@ pystan
 prophet
 plotly
 cufflinks
-os
+jmcmurray
