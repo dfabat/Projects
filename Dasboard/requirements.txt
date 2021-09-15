@@ -1,4 +1,5 @@
 pandas
 pystan
-prophet
+fbprophet
 plotly
+cufflinks
