@@ -4,6 +4,6 @@ dependencies:
   - pandas=1.2.3
   - plotly
   - pystan
-  - pip:21.0.1
+  - pip
   - pip:
     - prophet
