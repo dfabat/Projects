@@ -1,0 +1,4 @@
+pandas
+fbprophet
+pystan
+plotly
