@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from scipy import stats as sts
 from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler, MaxAbsScaler, QuantileTransformer
 from sklearn.metrics import roc_curve, roc_auc_score, classification_report, confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
@@ -455,3 +456,78 @@ def best_classification_split_score(dataset, threshold_begin=None, threshold_inc
     df_results = pd.DataFrame(dict_output)
     
     return df_results
+
+def f_test_two_samples(x, y, ddof=1, confidence_interval=0.90, alternative = 'two_tail'):
+    '''
+    This function calculates the f-score for a given confidence interval.
+    
+    Args:
+        x, y: numpy.ndarray or pandas array
+            The array must not contain missing values.
+        ddof: int, default = 1
+            Used to estimate sample variance. If population variance is aimed at this value must be 0.
+        confidence_interval: float, default = 0.90
+            Confidence interval is used to return the f critical value. Alpha equals to (1 - confidence_interval). If alternative ==
+            'two_tail', however, alpha equals to (1 - confidence_interval) / 2. For example, if alpha == 0.05 is aimed at, interval 
+            confidence must be 0.90 so each tail will be searched at 0.05 (0.10 / 2).
+        alternative: string, default = 'two_tail'
+            This refers as to the tail on the distribution that will be considered.
+                two_tail: Consider the accumulated probability below the lower and above the upper tails
+                lower: Consider the accumulated probability from the confidence interval backwards.
+                upper: Consider the accumulated probability from the confidence interval forward.
+    
+    Return:
+        This function will return the F score calculated, F critical value and p_value, respectively.
+    
+    '''
+    #########################################################################################################################
+    ## choosing numerator and denominator for the f-score equation
+    vx = np.var(x, ddof=1)
+    vy = np.var(y, ddof=1)
+    s = sorted([vx, vy], reverse = True)
+    if vx == s[0]:
+        pass
+    else:
+        x, y = y, x    
+    
+    ## sample variances -> ddof = 1
+    var_num = np.var(x, ddof=1)
+    var_denom = np.var(y, ddof=1)
+    
+    ## sample sizes
+    n_num = len(x)
+    n_denom = len(y)
+    
+    ## degrees of freedom
+    dof_num = n_num - 1
+    dof_denom = n_denom - 1
+    
+    ## f_calculated
+    f_calculated = var_num / var_denom
+        
+    ## finding critical point
+    if alternative == 'lower':
+        less = (1 - confidence_interval)
+        f_critical = sts.f.ppf(less, dof_num, dof_denom)
+    elif alternative == 'upper':
+        f_critical = sts.f.ppf(confidence_interval, dof_num, dof_denom)
+    else:
+        less = (1 - confidence_interval)
+        f_critical = (sts.f.ppf(less, dof_num, dof_denom), sts.f.ppf(confidence_interval, dof_num, dof_denom))
+    
+    ## p_value    
+    if alternative == 'lower':
+        p_value = 1 - (sts.f.cdf(f_calculated, dof_num, dof_denom))
+    elif alternative == 'upper':
+        p_value = sts.f.cdf(f_calculated, dof_num, dof_denom)
+    else:
+        p_value = (1 - (sts.f.cdf(f_calculated, dof_num, dof_denom))) * 2
+    
+    
+    return f_calculated, f_critical, p_value
+
+
+    
+    
+    
+    
